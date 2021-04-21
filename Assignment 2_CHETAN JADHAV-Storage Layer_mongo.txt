@@ -1,0 +1,110 @@
+MongoDB	
+1	 Display all the information of the EMP table?
+	 db.emp.find({ });
+
+2	 Display unique Jobs from EMP table?
+ 	 db.emp.find({},{"distinct(job)": 1 });
+
+3	 List the emps in the asc order of their Salaries?
+	 db.emporder by sal asc.find({}).sort({"sal": 1});
+
+4	 List the details of the emps in asc order of the Dptnos and desc of Jobs?
+	 db.emporder by deptno asc, job desc.find({}).sort({"deptno": -1});
+
+5	 Display all the unique job groups in the descending order?
+	  db.emporder by job desc.find({},{  "distinct(job)": 1}).sort({"job": -1});
+
+6	 Display all the details of all ‘Mgrs’
+	 db.emp.find({"job" : 'manager'});
+
+7	 List the emps who joined before 1981
+	 select * from emp where hiredate <('1981-1-1'); 
+	 db.emp.find({"hiredate ":{ "$lt" : ('1981-1-1' }});
+
+8	 List the Empno, Ename, Sal, Daily sal of all emps in the asc order of Annsal
+		 db.emporder by annsal asc.find({ },{"empno": 1,"ename": 1,"sal": 1,"sal/30asdailysal": 1,         "sal*12asannsal": 1}).sort({"annsal": 1});
+
+9	 Display the Empno, Ename, job, Hiredate, Exp of all Mgrs
+	db.emp.find({ "": {"$in": [select mgr from emp}},{   "empno": 1, "ename": 1,"job": 1,"hiredate": 1,"timestampdiff(year": 1,"hiredate": 1,"curdate())exp": 1});
+
+10	 List the Empno, Ename, Sal, Exp of all emps working for Mgr 7369
+              db.emp.find({"mgr " :  7369},{"empno": 1,"ename": 1,"sal": 1,"exp": 1});
+
+11	 Display all the details of the emps whose Comm  Is more than their Sal
+              db.emp.find({"$where": "this.comm  > this. sal"});
+
+13	 List the emps along with their Exp and Daily Sal is more than Rs 100
+           db.emp.find({"sal/30) ":{ "$gt" : 100 }});
+
+14	 List the emps who are either ‘CLERK’ or ‘ANALYST’ in the Desc order
+          db.emp.find({  "$or": [{
+    "$where": "this.job  == this. ‘CLERK’ "
+ },{ "$where": "this.job  == this. ‘ANALYST’ "
+   }]
+}).sort({
+ "job": -1
+});
+
+15	 List the emps who joined on 1-MAY-81,3-DEC-81,17-DEC-81,19-JAN-80 in asc order of seniority
+   	  db.emp.find({
+ "hiredate": {"$in":  [’01-may-81’,’03-dec-81’,’17-dec81’,’19-jan-80’] }
+}).sort({
+ "hiredate": 1
+});
+
+16	 List the emp who are working for the Deptno 10 or20
+	 db.emp.find({   "$or": [{"deptno " :  10  },{ "deptno " :  20 }]});
+
+17	 List the emps who are joined in the year 81
+	 db.emp.find({"$and": [{},{ }]});
+
+20	 List the Enames those are having five characters in their Names
+	  db.emp.find({ "length (ename) " :  5},{"ename": 1});
+
+21	 List the Enames those are starting with ‘S’ and with five characters
+		db.emp.find({"$and": [{"$where": "this.ename  == this. ‘S%’ "
+ },{ " length (ename) " :  5}]},{"ename": 1});
+
+22	 List the emps those are having four chars and third character must be ‘r’
+	  db.emp.find({   "$and": [{  "length(ename) " :  4 
+ },{ "$where": "this. ename  == this. ‘__R%’"}]});
+
+23	 List the Five character names starting with ‘S’ and ending with ‘H’
+	db.emp.find({   "$and": [{"length(ename) " :  5 },{ "$where": "this. ename  == this. ‘S%H’"
+   }]});
+
+24	 List the emps who joined in January
+          db.emp.find({ "$where": "this.to_char (hiredate,’mon’)  == this. ‘jan’"});	
+ 
+27	 List the emps whose names having a character set ‘ll’ together
+          db.emp.find({ "$where": "this.ename  == this. ‘%LL%’"});
+
+29	 List the emps who does not belong to Deptno 20
+           db.emp.find({"deptno " : { "$ne":  20}});
+
+30	 List all the emps except ‘PRESIDENT’ & ‘MGR” in asc order of Salaries
+	 db.emp.find({ "jobnot ": {"$in":  [‘PRESIDENT’,’MANAGER’] }}).sort({"sal": 1});
+
+31	 List the emps whose Empno not starting with digit78
+	   db.emp.find({ "empno not " :  ‘78%’});
+
+33	 List the emps who are working under ‘MGR’
+	  db.empe ,emp m .find({ "$where": "this.e.mgr  == this.m.empno "},{"e.ename||‘worksfor‘||m.ename": 1});
+
+34	 List the emps who joined in any year but not belongs to the month of March
+	 db.emp.find({ "to_char(hiredate,’MON’) not ": {"$in":  [‘MAR’}});
+
+35	 List all the Clerks of Deptno 20
+	 db.emp.find({"$and": [{"$where": "this.job  == this.‘CLERK’ "},{ " deptno " :  20}]});
+
+36	 List the emps of Deptno 30 or 10 joined in the year 1981
+     		db.emp.find({"$and": [{"to_char(hiredate,’YYYY’) ": {"$in":  [‘1981’] } },{
+   "$or": [{"deptno " :  30 },{ "deptno " : 10 )  }]}]});
+
+37	 Display the details of SMITH
+          db.emp.find({"ename" : 'smith'});
+
+38	 Display the location of SMITH
+       db.empe , dept d .find({"$and": [{"$where": "this.e.ename  == this. ‘SMITH’ "
+ },{ "$where": "this. e.deptno  == this.d.deptno "}]},{"loc": 1});
+    
